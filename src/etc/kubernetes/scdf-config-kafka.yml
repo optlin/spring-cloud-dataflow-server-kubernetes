@@ -1,11 +1,24 @@
+# DEPRECATED as of version 1.2.2.RELEASE - use the src/kubernetes/server/server-config-kafka.yaml file instead
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: scdf-config
 data:
   application.yaml: |-
+    security:
+      basic:
+        enabled: true
+        realm: Spring Cloud Data Flow
     spring:
       cloud:
+        dataflow:
+          security:
+            authentication:
+              file:
+                enabled: true
+                users:
+                  admin: admin, ROLE_MANAGE, ROLE_VIEW
+                  user: password, ROLE_VIEW, ROLE_CREATE
         deployer:
           kubernetes:
             environmentVariables: 'SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=${KAFKA_SERVICE_HOST}:${KAFKA_SERVICE_PORT},SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=${KAFKA_ZK_SERVICE_HOST}:${KAFKA_ZK_SERVICE_PORT},SPRING_REDIS_HOST=${REDIS_SERVICE_HOST},SPRING_REDIS_PORT=${REDIS_SERVICE_PORT}'
